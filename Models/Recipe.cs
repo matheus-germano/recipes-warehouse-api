@@ -14,6 +14,6 @@ namespace recipes_warehouse_api.Models
     public string Image { get; set; }
     public string PreparationMethod { get; set; }
     public int Likes { get; set; }
-    public IList<User> Users { get; set; }
+    public IList<LikedRecipe> LikedRecipes { get; set; }
   }
 }

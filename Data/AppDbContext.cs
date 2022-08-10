@@ -26,15 +26,15 @@ namespace recipes_warehouse_api.Data
          table.RecipeId
        });
 
-      // builder.Entity<LikedRecipe>()
-      //   .HasOne(x => x.User)
-      //   .WithMany(y => y.Recipes)
-      //   .HasForeignKey(y => y.RecipeId);
+      builder.Entity<LikedRecipe>()
+        .HasOne(x => x.User)
+        .WithMany(y => y.LikedRecipes)
+        .HasForeignKey(y => y.UserId);
 
-      // builder.Entity<LikedRecipe>()
-      //   .HasOne(x => x.Recipe)
-      //   .WithMany(y => y.Users)
-      //   .HasForeignKey(y => y.UserId);
+      builder.Entity<LikedRecipe>()
+        .HasOne(x => x.Recipe)
+        .WithMany(y => y.LikedRecipes)
+        .HasForeignKey(y => y.RecipeId);
     }
 
     public DbSet<User> Users { get; set; }
