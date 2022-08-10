@@ -41,10 +41,11 @@ namespace recipes_warehouse_api.Controllers.UserControllers
     {
       var user = new User
       {
+        Id = userToSignUp.Id,
         Name = userToSignUp.Name,
         Email = userToSignUp.Email,
         Password = PasswordHasher.Hash(userToSignUp.Password),
-        Id = userToSignUp.Id
+        Image = userToSignUp.Image
       };
 
       try
