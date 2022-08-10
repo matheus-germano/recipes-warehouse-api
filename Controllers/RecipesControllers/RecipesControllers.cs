@@ -36,10 +36,37 @@ namespace recipes_warehouse_api.Controllers.RecipesControllers
 
       if (recipe == null)
       {
-        return NotFound("Nenhuma receita encontrada");
+        return NotFound("No recipe found");
       }
 
       return Ok(recipe);
+    }
+
+    [HttpPost]
+    [Route("createRecipe")]
+    public async Task<IActionResult> CreateRecipe([FromServices] AppDbContext context, [FromBody] Recipe recipe)
+    {
+      var newRecipe = new Recipe
+      {
+        Id = recipe.Id,
+        Name = recipe.Name,
+        Type = recipe.Type,
+        Description = recipe.Description,
+        Image = recipe.Image,
+        PreparationMethod = recipe.PreparationMethod,
+        Likes = 0,
+      };
+
+      try
+      {
+        await context.Recipes.AddAsync(newRecipe);
+        await context.SaveChangesAsync();
+        return Ok(newRecipe);
+      }
+      catch (Exception e)
+      {
+        return BadRequest("Was not possible to create this recipe");
+      }
     }
 
     [HttpPost]
