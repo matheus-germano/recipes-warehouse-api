@@ -48,7 +48,6 @@ namespace recipes_warehouse_api.Controllers.RecipesControllers
     {
       var newRecipe = new Recipe
       {
-        Id = recipe.Id,
         Name = recipe.Name,
         Type = recipe.Type,
         Description = recipe.Description,
@@ -81,6 +80,16 @@ namespace recipes_warehouse_api.Controllers.RecipesControllers
       if (recipe == null)
       {
         return NotFound("No recipe found");
+      }
+
+      var recipeIsLiked = await context
+        .LikedRecipes
+        .AsNoTracking()
+        .FirstOrDefaultAsync(likedRecipe => likedRecipe.RecipeId == userAndRecipeId.RecipeId && likedRecipe.UserId == userAndRecipeId.UserId);
+
+      if (recipeIsLiked != null)
+      {
+        return BadRequest("You already liked this recipe");
       }
 
       try
