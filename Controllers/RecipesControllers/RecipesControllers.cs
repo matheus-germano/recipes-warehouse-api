@@ -46,53 +46,44 @@ namespace recipes_warehouse_api.Controllers.RecipesControllers
     [Route("likeRecipe")]
     public async Task<IActionResult> LikeRecipe([FromServices] AppDbContext context, [FromBody] LikedRecipe userAndRecipeId)
     {
-      try 
+      var recipe = await context
+        .Recipes
+        .AsNoTracking()
+        .FirstOrDefaultAsync(recipe => recipe.Id == userAndRecipeId.RecipeId);
+
+      if (recipe == null)
       {
-        var recipe = await context
-          .Recipes
-          .AsNoTracking()
-          .FirstOrDefaultAsync(recipe => recipe.Id == userAndRecipeId.RecipeId);
-
-        if (recipe == null)
-        {
-          return NotFound("No recipe found");
-        }
-
-        try {
-          recipe.Likes++;
-
-          context.Recipes.Update(recipe);
-          await context.Recipes.SaveChangesAsync(recipes);
-        } 
-        catch (Exception e) 
-        {
-          return BadRequest("Ocurred an error");
-        }
-      } 
-      catch (Exception e)
-      {
-        return BadRequest("Ocurred an error while trying to like recipe");
+        return NotFound("No recipe found");
       }
 
-      try 
+      try
       {
-        var likedRecipe = new LikedRecipe 
-        {
-          RecipeId = userAndRecipeId.RecipeId,
-          UserId = userToSignUp.UserId,
-        };
+        recipe.Likes++;
 
-        try
-        {
-          await context.LikedRecipes.AddAsync(user);
-          await context.SaveChangesAsync();
+        context.Recipes.Update(recipe);
+        await context.SaveChangesAsync();
+      }
+      catch (Exception e)
+      {
+        return BadRequest("Ocurred an error while trying to like the recipe");
+      }
 
-          return Ok("User registered");
-        }
-        catch (Exception e)
-        {
-          return BadRequest("Was not possible to register user");
-        }
+      var likedRecipe = new LikedRecipe
+      {
+        RecipeId = userAndRecipeId.RecipeId,
+        UserId = userAndRecipeId.UserId,
+      };
+
+      try
+      {
+        await context.LikedRecipes.AddAsync(likedRecipe);
+        await context.SaveChangesAsync();
+
+        return Ok("Liked recipe registered");
+      }
+      catch (Exception e)
+      {
+        return BadRequest("Was not possible to like the recipe");
       }
     }
   }

@@ -12,5 +12,6 @@ namespace recipes_warehouse_api.Models
     public string Email { get; set; }
     public string Password { get; set; }
     public string Image { get; set; }
+    public IList<Recipe> Recipes { get; set; }
   }
 }
