@@ -13,7 +13,7 @@ using SecureIdentity.Password;
 namespace recipes_warehouse_api.Controllers.UserControllers
 {
   [ApiController]
-  [Route("user")]
+  [Route("v1")]
   public class UserControllers : Controller
   {
     [HttpPost]
