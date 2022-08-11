@@ -54,6 +54,9 @@ namespace recipes_warehouse_api.Controllers.RecipesControllers
         Image = recipe.Image,
         PreparationMethod = recipe.PreparationMethod,
         Likes = 0,
+        CreatedBy = recipe.CreatedBy,
+        IsRecipeOwner = recipe.IsRecipeOwner,
+        CreatedAt = DateTime.Now,
       };
 
       try

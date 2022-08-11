@@ -19,12 +19,13 @@ namespace recipes_warehouse_api.Data
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
+      // LikedRecipe relationship
       builder.Entity<LikedRecipe>()
-       .HasKey(table => new
-       {
-         table.UserId,
-         table.RecipeId
-       });
+        .HasKey(table => new
+        {
+          table.UserId,
+          table.RecipeId
+        });
 
       builder.Entity<LikedRecipe>()
         .HasOne(x => x.User)
@@ -35,10 +36,29 @@ namespace recipes_warehouse_api.Data
         .HasOne(x => x.Recipe)
         .WithMany(y => y.LikedRecipes)
         .HasForeignKey(y => y.RecipeId);
+
+      // CreatedRecipe relationship
+      builder.Entity<CreatedRecipe>()
+      .HasKey(table => new
+      {
+        table.UserId,
+        table.RecipeId
+      });
+
+      builder.Entity<CreatedRecipe>()
+        .HasOne(x => x.User)
+        .WithMany(y => y.CreatedRecipes)
+        .HasForeignKey(y => y.UserId);
+
+      builder.Entity<CreatedRecipe>()
+        .HasOne(x => x.Recipe)
+        .WithMany(y => y.CreatedRecipes)
+        .HasForeignKey(y => y.RecipeId);
     }
 
     public DbSet<User> Users { get; set; }
     public DbSet<Recipe> Recipes { get; set; }
     public DbSet<LikedRecipe> LikedRecipes { get; set; }
+    public DbSet<CreatedRecipe> CreatedRecipes { get; set; }
   }
 }

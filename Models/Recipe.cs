@@ -14,6 +14,10 @@ namespace recipes_warehouse_api.Models
     public string Image { get; set; }
     public string PreparationMethod { get; set; }
     public int Likes { get; set; }
+    public string CreatedBy { get; set; }
+    public bool IsRecipeOwner { get; set; }
+    public DateTime CreatedAt { get; set; }
     public IList<LikedRecipe> LikedRecipes { get; set; }
+    public IList<CreatedRecipe> CreatedRecipes { get; set; }
   }
 }

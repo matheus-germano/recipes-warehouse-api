@@ -13,5 +13,6 @@ namespace recipes_warehouse_api.Models
     public string Password { get; set; }
     public string Image { get; set; }
     public IList<LikedRecipe> LikedRecipes { get; set; }
+    public IList<CreatedRecipe> CreatedRecipes { get; set; }
   }
 }
