@@ -19,6 +19,11 @@ namespace recipes_warehouse_api.Data
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
+      builder.Entity<Recipe>()
+        .HasOne(x => x.User)
+        .WithMany(y => y.Recipes)
+        .HasForeignKey(y => y.CreatedBy);
+
       // LikedRecipe relationship
       builder.Entity<LikedRecipe>()
         .HasKey(table => new

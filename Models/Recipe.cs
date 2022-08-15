@@ -19,5 +19,6 @@ namespace recipes_warehouse_api.Models
     public DateTime CreatedAt { get; set; }
     public IList<LikedRecipe> LikedRecipes { get; set; }
     public IList<CreatedRecipe> CreatedRecipes { get; set; }
+    public User User { get; set; }
   }
 }

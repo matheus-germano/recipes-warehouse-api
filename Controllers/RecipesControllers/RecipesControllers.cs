@@ -63,6 +63,23 @@ namespace recipes_warehouse_api.Controllers.RecipesControllers
       {
         await context.Recipes.AddAsync(newRecipe);
         await context.SaveChangesAsync();
+      }
+      catch (Exception e)
+      {
+        return BadRequest("Was not possible to create this recipe");
+      }
+
+      var createdRecipe = new CreatedRecipe
+      {
+        UserId = recipe.CreatedBy,
+        RecipeId = newRecipe.Id,
+      };
+
+      try
+      {
+        await context.CreatedRecipes.AddAsync(createdRecipe);
+        await context.SaveChangesAsync();
+
         return Ok(newRecipe);
       }
       catch (Exception e)
@@ -124,6 +141,51 @@ namespace recipes_warehouse_api.Controllers.RecipesControllers
       {
         return BadRequest("Was not possible to like the recipe");
       }
+    }
+
+    [HttpDelete]
+    [Route("deleteRecipe/{id}")]
+    public async Task<IActionResult> DeleteRecipe([FromServices] AppDbContext context, [FromRoute] int id)
+    {
+      var recipe = await context
+        .Recipes
+        .AsNoTracking()
+        .FirstOrDefaultAsync(recipe => recipe.Id == id);
+
+      if (recipe == null)
+      {
+        return NotFound("No recipe found");
+      }
+
+      try
+      {
+        context.Recipes.Remove(recipe);
+        await context.SaveChangesAsync();
+
+        return Ok("Recipe deleted");
+      }
+      catch (Exception e)
+      {
+        return BadRequest("Was not possible to remove the recipe");
+      }
+    }
+
+    [HttpGet]
+    [Route("usersRecipes")]
+    public async Task<IActionResult> GetUsersCreatedRecipes([FromServices] AppDbContext context, [FromHeader] string userId)
+    {
+      var usersRecipes = await context
+        .Recipes
+        .Where(recipe => recipe.CreatedBy == userId)
+        .AsNoTracking()
+        .ToListAsync();
+
+      if (usersRecipes == null)
+      {
+        return NotFound("No recipes found");
+      }
+
+      return Ok(usersRecipes);
     }
   }
 }
