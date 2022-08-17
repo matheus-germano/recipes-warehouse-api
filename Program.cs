@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using recipes_warehouse_api.Data;
 
@@ -12,6 +13,12 @@ builder.Services.AddDbContext<AppDbContext>(x => x.UseMySql(connectionString, ne
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//services cors
+builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
+{
+  builder.WithOrigins("http://127.0.0.1:5173").AllowAnyMethod().AllowAnyHeader();
+}));
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -20,6 +27,9 @@ if (app.Environment.IsDevelopment())
   app.UseSwagger();
   app.UseSwaggerUI();
 }
+
+//app cors
+app.UseCors("corsapp");
 
 app.UseHttpsRedirection();
 
