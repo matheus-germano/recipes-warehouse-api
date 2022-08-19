@@ -42,6 +42,22 @@ namespace recipes_warehouse_api.Controllers.RecipesControllers
       return Ok(recipe);
     }
 
+    [HttpGet]
+    [Route("featuredRecipes")]
+    public async Task<IActionResult> GetFeaturedRecipes([FromServices] AppDbContext context)
+    {
+      {
+        var recipes = (await context
+          .Recipes
+          .OrderByDescending(recipe => recipe.Likes)
+          .AsNoTracking()
+          .ToListAsync())
+          .Take(5);
+
+        return Ok(recipes);
+      }
+    }
+
     [HttpPost]
     [Route("createRecipe")]
     public async Task<IActionResult> CreateRecipe([FromServices] AppDbContext context, [FromBody] Recipe recipe)
