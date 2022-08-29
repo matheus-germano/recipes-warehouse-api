@@ -17,7 +17,7 @@ namespace recipes_warehouse_api.Controllers.UserControllers
   public class UserControllers : Controller
   {
     [HttpPost]
-    [Route("signIn")]
+    [Route("sign-in")]
     public async Task<IActionResult> SignIn([FromServices] AppDbContext context, [FromBody] UserToSignIn userToSignIn)
     {
       var user = await context.Users.AsNoTracking().FirstOrDefaultAsync(user => user.Email == userToSignIn.Email);
@@ -36,9 +36,16 @@ namespace recipes_warehouse_api.Controllers.UserControllers
     }
 
     [HttpPost]
-    [Route("signUp")]
+    [Route("sign-up")]
     public async Task<IActionResult> SignUp([FromServices] AppDbContext context, [FromBody] User userToSignUp)
     {
+      var userAlreadyExists = await context.Users.AsNoTracking().FirstOrDefaultAsync(user => user.Email == userToSignUp.Email);
+
+      if (userAlreadyExists != null)
+      {
+        return BadRequest(409);
+      }
+
       var user = new User
       {
         Id = userToSignUp.Id,
