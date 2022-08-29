@@ -203,5 +203,18 @@ namespace recipes_warehouse_api.Controllers.RecipesControllers
 
       return Ok(usersRecipes);
     }
+
+    [HttpGet]
+    [Route("users-liked-recipes")]
+    public async Task<IActionResult> GetUsersLikedRecipes([FromServices] AppDbContext context, [FromHeader] string userId)
+    {
+      var usersRecipes = await context
+        .LikedRecipes
+        .Where(recipe => recipe.UserId == userId)
+        .AsNoTracking()
+        .ToListAsync();
+
+      return Ok(usersRecipes);
+    }
   }
 }
